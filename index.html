@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ginger Bear Daycare</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #FDF8F2;
+      --warm-white: #FFFCF8;
+      --ginger: #C8622A;
+      --ginger-light: #E8834A;
+      --ginger-pale: #F9EAE0;
+      --bear-brown: #6B3F1E;
+      --forest: #3A6B4A;
+      --forest-light: #5A9B6A;
+      --forest-pale: #E8F3EB;
+      --text-dark: #2C1A0E;
+      --text-mid: #6B4C35;
+      --text-light: #A07850;
+      --border: #E8D5C0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 68px;
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .nav-logo-bear {
+      width: 40px; height: 40px; background: var(--ginger);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;
+    }
+    .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .nav-logo-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--bear-brown); }
+    .nav-logo-sub { font-size: 10px; font-weight: 300; color: var(--text-light); letter-spacing: 1.5px; text-transform: uppercase; }
+
+    .hamburger {
+      background: none; border: none; cursor: pointer;
+      display: flex; flex-direction: column; gap: 5px; padding: 6px;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--bear-brown); border-radius: 2px; }
+
+    .overlay {
+      position: fixed; inset: 0; background: rgba(44,26,14,0.45);
+      z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .overlay.open { opacity: 1; pointer-events: all; }
+
+    .sidebar {
+      position: fixed; top: 0; right: -320px; bottom: 0; width: 300px;
+      background: var(--warm-white); z-index: 300; padding: 2rem 1.5rem;
+      border-left: 1px solid var(--border);
+      transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
+    }
+    .sidebar.open { right: 0; }
+
+    .sidebar-close {
+      align-self: flex-end; background: none; border: none; cursor: pointer;
+      font-size: 24px; color: var(--text-mid); padding: 4px; margin-bottom: 1.5rem;
+    }
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);
+    }
+    .sidebar-nav-link {
+      display: flex; align-items: center; gap: 12px; padding: 14px 12px;
+      border-radius: 10px; cursor: pointer; color: var(--text-dark);
+      font-size: 15px; font-weight: 400; border: none; background: none;
+      width: 100%; text-align: left; transition: background 0.2s, color 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .sidebar-nav-link:hover { background: var(--ginger-pale); color: var(--ginger); }
+    .nav-icon {
+      width: 36px; height: 36px; background: var(--ginger-pale); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0;
+    }
+    .sidebar-social {
+      margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--border);
+      display: flex; gap: 12px;
+    }
+    .social-btn {
+      flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border);
+      background: none; cursor: pointer; font-size: 13px; font-weight: 500;
+      color: var(--text-mid); display: flex; align-items: center; justify-content: center;
+      gap: 6px; text-decoration: none; transition: background 0.2s, color 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .social-btn:hover { background: var(--ginger-pale); color: var(--ginger); }
+
+    .page { display: none; padding-top: 68px; min-height: 100vh; }
+    .page.active { display: block; }
+
+    .hero {
+      background: var(--warm-white); padding: 5rem 2rem 4rem;
+      text-align: center; border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 320px; height: 320px; border-radius: 50%; background: var(--ginger-pale); z-index: 0;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -80px; left: -40px;
+      width: 240px; height: 240px; border-radius: 50%; background: var(--forest-pale); z-index: 0;
+    }
+    .hero-inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--ginger-pale); color: var(--ginger);
+      font-size: 12px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 20px; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 3.8rem); font-weight: 700; line-height: 1.15;
+      color: var(--bear-brown); margin-bottom: 1.2rem;
+    }
+    .hero h1 span { color: var(--ginger); }
+    .hero-sub {
+      font-size: 17px; font-weight: 300; color: var(--text-mid);
+      line-height: 1.7; margin-bottom: 2.5rem;
+    }
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--ginger); color: white; border: none;
+      padding: 14px 28px; border-radius: 50px; font-size: 15px; font-weight: 500;
+      cursor: pointer; transition: background 0.2s, transform 0.15s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-primary:hover { background: var(--bear-brown); transform: translateY(-1px); }
+    .btn-outline {
+      background: none; color: var(--bear-brown); border: 1.5px solid var(--border);
+      padding: 14px 28px; border-radius: 50px; font-size: 15px; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+    }
+    .btn-outline:hover { border-color: var(--ginger); color: var(--ginger); }
+
+    .photo-placeholder {
+      background: var(--ginger-pale); border: 2px dashed var(--ginger-light);
+      border-radius: 16px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px; color: var(--ginger); font-size: 13px; font-weight: 500;
+      text-align: center; padding: 1rem;
+    }
+    .photo-placeholder .ph-icon { font-size: 32px; }
+
+    .groups-section { padding: 4rem 2rem; max-width: 900px; margin: 0 auto; }
+    .section-label {
+      font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-light); font-weight: 500; margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--bear-brown); margin-bottom: 0.75rem;
+    }
+    .section-desc {
+      color: var(--text-mid); font-weight: 300; font-size: 15px;
+      line-height: 1.7; margin-bottom: 2.5rem; max-width: 560px;
+    }
+    .groups-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 600px) { .groups-grid { grid-template-columns: 1fr; } }
+
+    .group-card {
+      background: var(--warm-white); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .group-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(107,63,30,0.08); }
+    .group-card-photo { height: 200px; }
+    .group-card-body { padding: 1.5rem; }
+    .group-tag {
+      display: inline-block; font-size: 11px; letter-spacing: 1px;
+      text-transform: uppercase; font-weight: 500; padding: 4px 10px;
+      border-radius: 20px; margin-bottom: 10px;
+    }
+    .tag-toddler { background: var(--ginger-pale); color: var(--ginger); }
+    .tag-preschool { background: var(--forest-pale); color: var(--forest); }
+    .group-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; color: var(--bear-brown); margin-bottom: 8px;
+    }
+    .group-card p { font-size: 14px; color: var(--text-mid); line-height: 1.6; font-weight: 300; }
+
+    .info-strip {
+      background: var(--bear-brown); padding: 2.5rem 2rem;
+      display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    }
+    .info-item { text-align: center; color: white; }
+    .info-item .info-val {
+      font-family: 'Playfair Display', serif; font-size: 1.8rem;
+      font-weight: 700; color: var(--ginger-light);
+    }
+    .info-item .info-lbl { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.7; margin-top: 4px; }
+
+    .inner-page { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+    .page-header { margin-bottom: 3rem; }
+
+    .mission-cards { display: grid; gap: 16px; margin-top: 2.5rem; }
+    .mission-card {
+      background: var(--warm-white); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.75rem; display: flex; gap: 1.25rem; align-items: flex-start;
+    }
+    .mission-icon {
+      width: 48px; height: 48px; border-radius: 12px; background: var(--ginger-pale);
+      display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+    }
+    .mission-card h3 {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem;
+      color: var(--bear-brown); margin-bottom: 6px;
+    }
+    .mission-card p { font-size: 14px; color: var(--text-mid); line-height: 1.65; font-weight: 300; }
+
+    .mission-photo-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 3rem; }
+    .mission-photo { height: 180px; }
+    @media (max-width: 600px) { .mission-photo-row { grid-template-columns: 1fr; } }
+
+    .reviews-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 2rem; }
+    @media (max-width: 640px) { .reviews-grid { grid-template-columns: 1fr; } }
+    .review-card {
+      background: var(--warm-white); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.5rem;
+    }
+    .review-stars { color: var(--ginger); font-size: 15px; margin-bottom: 10px; }
+    .review-text {
+      font-size: 14px; color: var(--text-mid); line-height: 1.7;
+      font-weight: 300; font-style: italic; margin-bottom: 1rem;
+    }
+    .review-author { display: flex; align-items: center; gap: 10px; }
+    .review-avatar {
+      width: 36px; height: 36px; border-radius: 50%; background: var(--ginger);
+      color: white; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 500;
+    }
+    .review-name { font-size: 13px; font-weight: 500; color: var(--bear-brown); }
+    .review-child { font-size: 12px; color: var(--text-light); }
+    .reviews-cta {
+      margin-top: 2.5rem; padding: 2rem; background: var(--ginger-pale);
+      border-radius: 16px; text-align: center;
+    }
+    .reviews-cta p { font-size: 14px; color: var(--text-mid); margin-bottom: 1rem; font-weight: 300; }
+
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 2rem; }
+    @media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr; } }
+    .contact-card {
+      background: var(--warm-white); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.75rem;
+    }
+    .contact-card h3 {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem;
+      color: var(--bear-brown); margin-bottom: 1rem;
+    }
+    .contact-item {
+      display: flex; gap: 10px; margin-bottom: 12px;
+      font-size: 14px; color: var(--text-mid); align-items: flex-start;
+    }
+    .contact-item .ci-icon { font-size: 16px; margin-top: 1px; color: var(--ginger); }
+    .map-placeholder {
+      height: 220px; border-radius: 12px; background: var(--ginger-pale);
+      border: 2px dashed var(--ginger-light); display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--ginger); font-size: 13px; gap: 8px; font-weight: 500; margin-bottom: 1rem;
+    }
+    .enquiry-form { display: flex; flex-direction: column; gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 12px; font-weight: 500; color: var(--text-mid); letter-spacing: 0.5px; }
+    .form-group input, .form-group textarea {
+      background: var(--cream); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+      color: var(--text-dark); transition: border-color 0.2s; resize: none;
+    }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--ginger); }
+    .hours-table { width: 100%; border-collapse: collapse; }
+    .hours-table td { padding: 8px 0; font-size: 14px; border-bottom: 1px solid var(--border); }
+    .hours-table td:first-child { color: var(--text-mid); font-weight: 500; }
+    .hours-table td:last-child { text-align: right; color: var(--ginger); font-weight: 500; }
+
+    footer {
+      background: var(--bear-brown); color: white;
+      padding: 2.5rem 2rem; text-align: center;
+    }
+    footer .foot-logo {
+      font-family: 'Playfair Display', serif; font-size: 1.3rem;
+      margin-bottom: 0.5rem; color: var(--ginger-light);
+    }
+    footer p { font-size: 13px; opacity: 0.6; margin-bottom: 1.25rem; }
+    .foot-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .foot-link {
+      font-size: 13px; color: rgba(255,255,255,0.7); cursor: pointer;
+      background: none; border: none; text-decoration: underline;
+      text-underline-offset: 3px; font-family: 'DM Sans', sans-serif;
+    }
+    .foot-link:hover { color: white; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo" onclick="showPage('home')">
+      <div class="nav-logo-bear">🐻</div>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Ginger Bear</span>
+        <span class="nav-logo-sub">Daycare</span>
+      </div>
+    </div>
+    <button class="hamburger" onclick="openSidebar()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <div class="sidebar" id="sidebar">
+    <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+    <div class="sidebar-logo">
+      <div class="nav-logo-bear" style="width:36px;height:36px;font-size:18px;">🐻</div>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Ginger Bear</span>
+        <span class="nav-logo-sub">Daycare</span>
+      </div>
+    </div>
+    <button class="sidebar-nav-link" onclick="showPage('home')"><span class="nav-icon">🏡</span> Home</button>
+    <button class="sidebar-nav-link" onclick="showPage('mission')"><span class="nav-icon">🌱</span> Our Mission & Values</button>
+    <button class="sidebar-nav-link" onclick="showPage('reviews')"><span class="nav-icon">⭐</span> Reviews</button>
+    <button class="sidebar-nav-link" onclick="showPage('contact')"><span class="nav-icon">📍</span> Contact & Find Us</button>
+    <div class="sidebar-social">
+      <a href="https://www.instagram.com" target="_blank" class="social-btn">📸 Instagram</a>
+      <a href="https://www.facebook.com" target="_blank" class="social-btn">👍 Facebook</a>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-badge">🐻 Nurturing Little Minds</div>
+        <h1>A warm place where <span>little ones</span> grow & thrive</h1>
+        <p class="hero-sub">Ginger Bear Daycare is an independent childcare creche welcoming children aged 1–5. We offer a safe, loving, and playful environment in the heart of our community.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="showPage('contact')">Get in Touch</button>
+          <button class="btn-outline" onclick="showPage('mission')">Our Story</button>
+        </div>
+      </div>
+      <div class="photo-placeholder" style="max-width:760px;margin:3rem auto 0;height:340px;">
+        <span class="ph-icon">📷</span>
+        <strong>Add your hero photo here</strong>
+        <span>Replace this with: &lt;img src="your-photo.jpg" style="width:100%;height:340px;object-fit:cover;border-radius:16px;"&gt;</span>
+      </div>
+    </section>
+
+    <section class="groups-section">
+      <div class="section-label">Our Groups</div>
+      <h2 class="section-title">Care tailored to every stage</h2>
+      <p class="section-desc">We split our children into two small, dedicated groups so every child gets the right level of attention and stimulation.</p>
+      <div class="groups-grid">
+        <div class="group-card">
+          <div class="group-card-photo photo-placeholder"><span class="ph-icon">📷</span><span>Add toddler group photo</span></div>
+          <div class="group-card-body">
+            <span class="group-tag tag-toddler">Ages 1–2.5</span>
+            <h3>Toddler Room</h3>
+            <p>A cosy, calm space for our youngest explorers. Focused on sensory play, early language, and building confidence through gentle routines.</p>
+          </div>
+        </div>
+        <div class="group-card">
+          <div class="group-card-photo photo-placeholder"><span class="ph-icon">📷</span><span>Add preschool group photo</span></div>
+          <div class="group-card-body">
+            <span class="group-tag tag-preschool">Ages 2.5–5</span>
+            <h3>Preschool Room</h3>
+            <p>A vibrant space where curiosity flourishes. Children enjoy creative, social, and early literacy activities to prepare for primary school.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="info-strip">
+      <div class="info-item"><div class="info-val">Ages 1–5</div><div class="info-lbl">Age Range</div></div>
+      <div class="info-item"><div class="info-val">Mon–Fri</div><div class="info-lbl">Open Days</div></div>
+      <div class="info-item"><div class="info-val">7:30am</div><div class="info-lbl">Opens</div></div>
+      <div class="info-item"><div class="info-val">6:00pm</div><div class="info-lbl">Closes</div></div>
+    </div>
+
+    <footer>
+      <div class="foot-logo">🐻 Ginger Bear Daycare</div>
+      <p>Independent childcare with heart</p>
+      <div class="foot-links">
+        <button class="foot-link" onclick="showPage('mission')">Our Mission</button>
+        <button class="foot-link" onclick="showPage('reviews')">Reviews</button>
+        <button class="foot-link" onclick="showPage('contact')">Contact</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MISSION -->
+  <div class="page" id="page-mission">
+    <div class="inner-page">
+      <div class="page-header">
+        <div class="section-label">Who We Are</div>
+        <h1 class="section-title">Our Mission & Values</h1>
+        <p class="section-desc">At Ginger Bear Daycare, we believe every child deserves a warm, safe, and stimulating environment where they can truly flourish.</p>
+      </div>
+      <div class="mission-cards">
+        <div class="mission-card"><div class="mission-icon">🌱</div><div><h3>Nurturing Every Child</h3><p>We treat every child as an individual, celebrating their unique personality, pace, and way of learning. Our educators build genuine, caring relationships with each child in our care.</p></div></div>
+        <div class="mission-card"><div class="mission-icon">🏡</div><div><h3>A Home Away From Home</h3><p>We've created a warm, welcoming space that feels safe and familiar. Our small group sizes ensure no child ever feels lost in the crowd — just loved and seen.</p></div></div>
+        <div class="mission-card"><div class="mission-icon">🎨</div><div><h3>Learning Through Play</h3><p>Play is how children make sense of the world. Our curriculum is rich in creative, sensory, and outdoor activities that ignite curiosity and build essential skills.</p></div></div>
+        <div class="mission-card"><div class="mission-icon">🤝</div><div><h3>Partnership With Families</h3><p>We see parents and carers as essential partners. Through open communication, daily updates, and regular meetings, we work together to support each child's journey.</p></div></div>
+        <div class="mission-card"><div class="mission-icon">🌍</div><div><h3>Community & Inclusion</h3><p>We welcome all children and families, celebrating diversity and building a community where every background, ability, and personality is embraced and valued.</p></div></div>
+        <div class="mission-card"><div class="mission-icon">⭐</div><div><h3>High Standards, Always</h3><p>As a dedicated independent creche, we go above and beyond minimum requirements — because the families we serve deserve nothing less than the very best.</p></div></div>
+      </div>
+      <div class="mission-photo-row">
+        <div class="mission-photo photo-placeholder"><span>📷</span><span>Add photo</span></div>
+        <div class="mission-photo photo-placeholder"><span>📷</span><span>Add photo</span></div>
+        <div class="mission-photo photo-placeholder"><span>📷</span><span>Add photo</span></div>
+      </div>
+    </div>
+    <footer>
+      <div class="foot-logo">🐻 Ginger Bear Daycare</div>
+      <p>Independent childcare with heart</p>
+      <div class="foot-links">
+        <button class="foot-link" onclick="showPage('home')">Home</button>
+        <button class="foot-link" onclick="showPage('reviews')">Reviews</button>
+        <button class="foot-link" onclick="showPage('contact')">Contact</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- REVIEWS -->
+  <div class="page" id="page-reviews">
+    <div class="inner-page">
+      <div class="page-header">
+        <div class="section-label">What Families Say</div>
+        <h1 class="section-title">Reviews</h1>
+        <p class="section-desc">We're proud of the trust our families place in us. Here's what some of them have shared about their experience at Ginger Bear Daycare.</p>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"We were nervous about our daughter starting daycare but Ginger Bear made the transition so gentle and loving. She cries when she has to leave in the evenings!"</p>
+          <div class="review-author"><div class="review-avatar">SR</div><div><div class="review-name">Sarah R.</div><div class="review-child">Parent of a Toddler Room child</div></div></div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"The staff genuinely love what they do and it shows in every interaction. Our son has come on leaps and bounds since he started — his confidence is incredible."</p>
+          <div class="review-author"><div class="review-avatar" style="background:var(--forest);">DM</div><div><div class="review-name">Dermot M.</div><div class="review-child">Parent of a Preschool Room child</div></div></div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"I love getting the daily updates. It means so much to know what your child has been up to. The activities are always so creative and engaging."</p>
+          <div class="review-author"><div class="review-avatar" style="background:var(--bear-brown);">AK</div><div><div class="review-name">Aoife K.</div><div class="review-child">Parent of a Toddler Room child</div></div></div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"We've been with Ginger Bear for two years and couldn't recommend them more highly. A truly special place run by truly special people."</p>
+          <div class="review-author"><div class="review-avatar" style="background:var(--ginger-light);">PL</div><div><div class="review-name">Patrick L.</div><div class="review-child">Parent of two children</div></div></div>
+        </div>
+      </div>
+      <div class="reviews-cta">
+        <p>These are placeholder reviews — swap them out for real ones from your families!</p>
+        <button class="btn-primary" onclick="showPage('contact')">Get in Touch</button>
+      </div>
+    </div>
+    <footer>
+      <div class="foot-logo">🐻 Ginger Bear Daycare</div>
+      <p>Independent childcare with heart</p>
+      <div class="foot-links">
+        <button class="foot-link" onclick="showPage('home')">Home</button>
+        <button class="foot-link" onclick="showPage('mission')">Our Mission</button>
+        <button class="foot-link" onclick="showPage('contact')">Contact</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="page" id="page-contact">
+    <div class="inner-page">
+      <div class="page-header">
+        <div class="section-label">Get In Touch</div>
+        <h1 class="section-title">Contact & Find Us</h1>
+        <p class="section-desc">We'd love to hear from you — whether you have a question, want to arrange a visit, or are ready to enrol.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>📍 Find Us</h3>
+          <div class="map-placeholder">
+            <span style="font-size:28px;">🗺️</span>
+            <strong>Add your Google Map here</strong>
+            <span style="font-size:12px;opacity:0.8;">Google Maps → Share → Embed a map → paste the iframe code here</span>
+          </div>
+          <div class="contact-item"><span class="ci-icon">📍</span><span>Your Street Address, Town, County, Eircode</span></div>
+          <div class="contact-item"><span class="ci-icon">📞</span><span>+353 XX XXX XXXX</span></div>
+          <div class="contact-item"><span class="ci-icon">✉️</span><span>hello@gingerbeardaycare.ie</span></div>
+          <br/>
+          <h3 style="margin-bottom:1rem;">🕐 Opening Hours</h3>
+          <table class="hours-table">
+            <tr><td>Monday – Friday</td><td>7:30am – 6:00pm</td></tr>
+            <tr><td>Saturday</td><td>Closed</td></tr>
+            <tr><td>Sunday</td><td>Closed</td></tr>
+            <tr><td>Bank Holidays</td><td>Closed</td></tr>
+          </table>
+        </div>
+        <div class="contact-card">
+          <h3>💬 Send Us a Message</h3>
+          <br/>
+          <div class="enquiry-form">
+            <div class="form-group"><label>Your Name</label><input type="text" placeholder="e.g. Mary O'Brien" /></div>
+            <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com" /></div>
+            <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+353 xx xxx xxxx" /></div>
+            <div class="form-group"><label>Child's Age</label><input type="text" placeholder="e.g. 2 years old" /></div>
+            <div class="form-group"><label>Your Message</label><textarea rows="4" placeholder="Tell us about your childcare needs or any questions..."></textarea></div>
+            <button class="btn-primary" onclick="alert('Thank you! We will be in touch shortly 🐻')">Send Enquiry</button>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:2rem;text-align:center;padding:2rem;background:var(--ginger-pale);border-radius:16px;">
+        <p style="color:var(--text-mid);margin-bottom:1rem;font-size:15px;">Follow us for daily updates, activities & photos of the fun!</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="https://www.instagram.com" target="_blank" class="btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;">📸 Instagram</a>
+          <a href="https://www.facebook.com" target="_blank" class="btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;">👍 Facebook</a>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="foot-logo">🐻 Ginger Bear Daycare</div>
+      <p>Independent childcare with heart</p>
+      <div class="foot-links">
+        <button class="foot-link" onclick="showPage('home')">Home</button>
+        <button class="foot-link" onclick="showPage('mission')">Our Mission</button>
+        <button class="foot-link" onclick="showPage('reviews')">Reviews</button>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + name).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      closeSidebar();
+    }
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('overlay').classList.add('open');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.remove('open');
+    }
+  </script>
+</body>
+</html>
