@@ -249,11 +249,6 @@
     }
     .review-name { font-size: 13px; font-weight: 500; color: var(--bear-brown); }
     .review-child { font-size: 12px; color: var(--text-light); }
-    .reviews-cta {
-      margin-top: 2.5rem; padding: 2rem; background: var(--ginger-pale);
-      border-radius: 16px; text-align: center;
-    }
-    .reviews-cta p { font-size: 14px; color: var(--text-mid); margin-bottom: 1rem; font-weight: 300; }
 
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 2rem; }
     @media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr; } }
@@ -270,12 +265,18 @@
       font-size: 14px; color: var(--text-mid); align-items: flex-start;
     }
     .contact-item .ci-icon { font-size: 16px; margin-top: 1px; color: var(--ginger); }
-    .map-placeholder {
-      height: 220px; border-radius: 12px; background: var(--ginger-pale);
-      border: 2px dashed var(--ginger-light); display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      color: var(--ginger); font-size: 13px; gap: 8px; font-weight: 500; margin-bottom: 1rem;
+
+    .map-wrapper {
+      position: relative; width: 100%; padding-bottom: 56.25%;
+      height: 0; overflow: hidden; border-radius: 12px;
+      margin-bottom: 1rem;
     }
+    .map-wrapper iframe {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0; border-radius: 12px;
+    }
+
     .enquiry-form { display: flex; flex-direction: column; gap: 12px; }
     .form-group { display: flex; flex-direction: column; gap: 5px; }
     .form-group label { font-size: 12px; font-weight: 500; color: var(--text-mid); letter-spacing: 0.5px; }
@@ -339,8 +340,8 @@
     <button class="sidebar-nav-link" onclick="showPage('reviews')"><span class="nav-icon">⭐</span> Reviews</button>
     <button class="sidebar-nav-link" onclick="showPage('contact')"><span class="nav-icon">📍</span> Contact & Find Us</button>
     <div class="sidebar-social">
-      <a href="https://www.instagram.com" target="_blank" class="social-btn">📸 Instagram</a>
-      <a href="https://www.facebook.com" target="_blank" class="social-btn">👍 Facebook</a>
+      <a href="https://www.instagram.com/gingerbeardaycare73" target="_blank" class="social-btn">📸 Instagram</a>
+      <a href="https://www.facebook.com/p/GingerBear-Daycare-100057397511642/" target="_blank" class="social-btn">👍 Facebook</a>
     </div>
   </div>
 
@@ -350,7 +351,6 @@
       <div class="hero-inner">
         <div class="hero-badge">🐻 Nurturing Little Minds</div>
         <h1>A warm place where <span>little ones</span> grow & thrive</h1>
-        <!-- CHANGED: opening paragraph -->
         <p class="hero-sub">Welcome to Ginger Bear Daycare. We provide a warm, safe, and caring space for children to learn, play, and grow. Our goal is to create a home-from-home environment where every child feels valued, supported, and encouraged to explore, develop, and have fun every day.</p>
         <div class="hero-btns">
           <button class="btn-primary" onclick="showPage('contact')">Get in Touch</button>
@@ -374,7 +374,6 @@
           <div class="group-card-body">
             <span class="group-tag tag-toddler">Ages 1–2.5</span>
             <h3>Toddler Room</h3>
-            <!-- CHANGED: toddler description -->
             <p>A warm and welcoming space where our youngest children can feel safe, happy, and busy. Through play-based learning, sensory experiences, creativity, and gentle routines, we encourage curiosity, confidence, independence, and early development in a caring home-from-home environment.</p>
           </div>
         </div>
@@ -383,14 +382,12 @@
           <div class="group-card-body">
             <span class="group-tag tag-preschool">Ages 2.5–5</span>
             <h3>Preschool Room</h3>
-            <!-- CHANGED: preschool description -->
             <p>In our pre-school room, our aim is to support each child in becoming an agentic learner, confident in making choices, expressing their ideas, and taking an active role in their own learning. Through play-based experiences, creativity, and meaningful relationships, we encourage independence, curiosity, and confidence as children grow and prepare for their transition to primary school.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CHANGED: opens 7:30 → 8:00 -->
     <div class="info-strip">
       <div class="info-item"><div class="info-val">Ages 1–5</div><div class="info-lbl">Age Range</div></div>
       <div class="info-item"><div class="info-val">Mon–Fri</div><div class="info-lbl">Open Days</div></div>
@@ -451,29 +448,45 @@
         <p class="section-desc">We're proud of the trust our families place in us. Here's what some of them have shared about their experience at Ginger Bear Daycare.</p>
       </div>
       <div class="reviews-grid">
+
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
-          <p class="review-text">"We were nervous about our daughter starting daycare but Ginger Bear made the transition so gentle and loving. She cries when she has to leave in the evenings!"</p>
-          <div class="review-author"><div class="review-avatar">SR</div><div><div class="review-name">Sarah R.</div><div class="review-child">Parent of a Toddler Room child</div></div></div>
+          <p class="review-text">"If you are looking for a place where your kids are loved, cherished and looked after by professional, friendly and truly extraordinary professionals, this is your place! My twins attended Ginger Bear from the age of 13 months till the age of 5. I would not have looked after them better during that time :)"</p>
+          <div class="review-author">
+            <div class="review-avatar">MS</div>
+            <div><div class="review-name">Marta S.</div><div class="review-child">Parent of two children</div></div>
+          </div>
         </div>
+
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
-          <p class="review-text">"The staff genuinely love what they do and it shows in every interaction. Our son has come on leaps and bounds since he started — his confidence is incredible."</p>
-          <div class="review-author"><div class="review-avatar" style="background:var(--forest);">DM</div><div><div class="review-name">Dermot M.</div><div class="review-child">Parent of a Preschool Room child</div></div></div>
+          <p class="review-text">"I'd give more stars if I could! My 3 children all attended Gingerbear over the span of 8 years. Jennifer & the staff are amazing. They don't just look after the children but they love them & mind them. My children all had a wonderful experience here, we couldn't have wished for more. Most of the staff have been there for years & it's clear that they love their work."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--forest);">CW</div>
+            <div><div class="review-name">Claire W.</div><div class="review-child">Parent of three children</div></div>
+          </div>
         </div>
+
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
-          <p class="review-text">"I love getting the daily updates. It means so much to know what your child has been up to. The activities are always so creative and engaging."</p>
-          <div class="review-author"><div class="review-avatar" style="background:var(--bear-brown);">AK</div><div><div class="review-name">Aoife K.</div><div class="review-child">Parent of a Toddler Room child</div></div></div>
+          <p class="review-text">"Highly recommend Jennifer and her fabulous team of ladies who have taken such great care of my son Ciaran. He has grown and developed into a very happy, confident and independent child which can be attributed to the hard work the girls have given during his years here. He leaves with many happy memories of all his friends at Ginger Bear. Thank you to you all. ♥️"</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--bear-brown);">G</div>
+            <div><div class="review-name">Gillian</div><div class="review-child">Parent of child</div></div>
+          </div>
         </div>
+
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
-          <p class="review-text">"We've been with Ginger Bear for two years and couldn't recommend them more highly. A truly special place run by truly special people."</p>
-          <div class="review-author"><div class="review-avatar" style="background:var(--ginger-light);">PL</div><div><div class="review-name">Patrick L.</div><div class="review-child">Parent of two children</div></div></div>
+          <p class="review-text">"Both my children attend Gingerbear Daycare. I could not recommend highly enough. Jennifer and her fantastic staff go above and beyond every day offering love care and attention to every individual child and I have 2 happy well rounded toddlers to prove it! Keep up the excellent work ladies!!"</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--ginger-light);">OK</div>
+            <div><div class="review-name">Orlaith K.</div><div class="review-child">Parent of two children</div></div>
+          </div>
         </div>
+
       </div>
-      <div class="reviews-cta">
-        <p>These are placeholder reviews — swap them out for real ones from your families!</p>
+      <div style="margin-top:2.5rem; text-align:center;">
         <button class="btn-primary" onclick="showPage('contact')">Get in Touch</button>
       </div>
     </div>
@@ -499,14 +512,22 @@
       <div class="contact-grid">
         <div class="contact-card">
           <h3>📍 Find Us</h3>
-          <div class="map-placeholder">
-            <span style="font-size:28px;">🗺️</span>
-            <strong>Add your Google Map here</strong>
-            <span style="font-size:12px;opacity:0.8;">Google Maps → Share → Embed a map → paste the iframe code here</span>
+
+          <!-- UPDATED: Real Google Maps embed, responsive wrapper -->
+          <div class="map-wrapper">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1822.089932641625!2d-6.399088924124505!3d53.38132957229944!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486772adf95d6f49%3A0x38488f8dc28bf55!2sGinger%20Bear%20Day%20Care!5e1!3m2!1sen!2sie!4v1780009014071!5m2!1sen!2sie"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
           </div>
-          <div class="contact-item"><span class="ci-icon">📍</span><span>Your Street Address, Town, County, Eircode</span></div>
-          <div class="contact-item"><span class="ci-icon">📞</span><span>+353 XX XXX XXXX</span></div>
-          <div class="contact-item"><span class="ci-icon">✉️</span><span>hello@gingerbeardaycare.ie</span></div>
+
+          <!-- UPDATED: Real address, phone, email -->
+          <div class="contact-item"><span class="ci-icon">📍</span><span>99A Portersfield, Clonsilla, Dublin 15, D15 TD42</span></div>
+          <div class="contact-item"><span class="ci-icon">📞</span><span>(01) 640 9697</span></div>
+          <div class="contact-item"><span class="ci-icon">✉️</span><a href="mailto:jennylynch1@gmail.com" style="color:var(--text-mid); text-decoration:none;">jennylynch1@gmail.com</a></div>
+
           <br/>
           <h3 style="margin-bottom:1rem;">🕐 Opening Hours</h3>
           <table class="hours-table">
@@ -516,6 +537,7 @@
             <tr><td>Bank Holidays</td><td>Closed</td></tr>
           </table>
         </div>
+
         <div class="contact-card">
           <h3>💬 Send Us a Message</h3>
           <br/>
@@ -529,11 +551,13 @@
           </div>
         </div>
       </div>
+
+      <!-- UPDATED: Real Instagram and Facebook links -->
       <div style="margin-top:2rem;text-align:center;padding:2rem;background:var(--ginger-pale);border-radius:16px;">
         <p style="color:var(--text-mid);margin-bottom:1rem;font-size:15px;">Follow us for daily updates, activities & photos of the fun!</p>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-          <a href="https://www.instagram.com" target="_blank" class="btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;">📸 Instagram</a>
-          <a href="https://www.facebook.com" target="_blank" class="btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;">👍 Facebook</a>
+          <a href="https://www.instagram.com/gingerbeardaycare73" target="_blank" class="btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;">📸 Instagram</a>
+          <a href="https://www.facebook.com/p/GingerBear-Daycare-100057397511642/" target="_blank" class="btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;">👍 Facebook</a>
         </div>
       </div>
     </div>
