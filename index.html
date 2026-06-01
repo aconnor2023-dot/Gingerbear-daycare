@@ -268,13 +268,11 @@
 
     .map-wrapper {
       position: relative; width: 100%; padding-bottom: 56.25%;
-      height: 0; overflow: hidden; border-radius: 12px;
-      margin-bottom: 1rem;
+      height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 1rem;
     }
     .map-wrapper iframe {
       position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
-      border: 0; border-radius: 12px;
+      width: 100%; height: 100%; border: 0; border-radius: 12px;
     }
 
     .enquiry-form { display: flex; flex-direction: column; gap: 12px; }
@@ -286,6 +284,14 @@
       color: var(--text-dark); transition: border-color 0.2s; resize: none;
     }
     .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--ginger); }
+
+    .form-success {
+      display: none; background: var(--forest-pale); border: 1px solid var(--forest-light);
+      border-radius: 12px; padding: 1.25rem; text-align: center;
+      color: var(--forest); font-size: 14px; line-height: 1.6;
+    }
+    .form-success.show { display: block; }
+
     .hours-table { width: 100%; border-collapse: collapse; }
     .hours-table td { padding: 8px 0; font-size: 14px; border-bottom: 1px solid var(--border); }
     .hours-table td:first-child { color: var(--text-mid); font-weight: 500; }
@@ -448,7 +454,6 @@
         <p class="section-desc">We're proud of the trust our families place in us. Here's what some of them have shared about their experience at Ginger Bear Daycare.</p>
       </div>
       <div class="reviews-grid">
-
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
           <p class="review-text">"If you are looking for a place where your kids are loved, cherished and looked after by professional, friendly and truly extraordinary professionals, this is your place! My twins attended Ginger Bear from the age of 13 months till the age of 5. I would not have looked after them better during that time :)"</p>
@@ -457,7 +462,6 @@
             <div><div class="review-name">Marta S.</div><div class="review-child">Parent of two children</div></div>
           </div>
         </div>
-
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
           <p class="review-text">"I'd give more stars if I could! My 3 children all attended Gingerbear over the span of 8 years. Jennifer & the staff are amazing. They don't just look after the children but they love them & mind them. My children all had a wonderful experience here, we couldn't have wished for more. Most of the staff have been there for years & it's clear that they love their work."</p>
@@ -466,7 +470,6 @@
             <div><div class="review-name">Claire W.</div><div class="review-child">Parent of three children</div></div>
           </div>
         </div>
-
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
           <p class="review-text">"Highly recommend Jennifer and her fabulous team of ladies who have taken such great care of my son Ciaran. He has grown and developed into a very happy, confident and independent child which can be attributed to the hard work the girls have given during his years here. He leaves with many happy memories of all his friends at Ginger Bear. Thank you to you all. ♥️"</p>
@@ -475,7 +478,6 @@
             <div><div class="review-name">Gillian</div><div class="review-child">Parent of child</div></div>
           </div>
         </div>
-
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
           <p class="review-text">"Both my children attend Gingerbear Daycare. I could not recommend highly enough. Jennifer and her fantastic staff go above and beyond every day offering love care and attention to every individual child and I have 2 happy well rounded toddlers to prove it! Keep up the excellent work ladies!!"</p>
@@ -484,7 +486,6 @@
             <div><div class="review-name">Orlaith K.</div><div class="review-child">Parent of two children</div></div>
           </div>
         </div>
-
       </div>
       <div style="margin-top:2.5rem; text-align:center;">
         <button class="btn-primary" onclick="showPage('contact')">Get in Touch</button>
@@ -512,22 +513,16 @@
       <div class="contact-grid">
         <div class="contact-card">
           <h3>📍 Find Us</h3>
-
-          <!-- UPDATED: Real Google Maps embed, responsive wrapper -->
           <div class="map-wrapper">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1822.089932641625!2d-6.399088924124505!3d53.38132957229944!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486772adf95d6f49%3A0x38488f8dc28bf55!2sGinger%20Bear%20Day%20Care!5e1!3m2!1sen!2sie!4v1780009014071!5m2!1sen!2sie"
-              allowfullscreen=""
-              loading="lazy"
+              allowfullscreen="" loading="lazy"
               referrerpolicy="no-referrer-when-downgrade">
             </iframe>
           </div>
-
-          <!-- UPDATED: Real address, phone, email -->
           <div class="contact-item"><span class="ci-icon">📍</span><span>99A Portersfield, Clonsilla, Dublin 15, D15 TD42</span></div>
           <div class="contact-item"><span class="ci-icon">📞</span><span>(01) 640 9697</span></div>
-          <div class="contact-item"><span class="ci-icon">✉️</span><a href="mailto:jennylynch1@gmail.com" style="color:var(--text-mid); text-decoration:none;">jennylynch1@gmail.com</a></div>
-
+          <div class="contact-item"><span class="ci-icon">✉️</span><a href="mailto:jennylynch1@gmail.com" style="color:var(--text-mid);text-decoration:none;">jennylynch1@gmail.com</a></div>
           <br/>
           <h3 style="margin-bottom:1rem;">🕐 Opening Hours</h3>
           <table class="hours-table">
@@ -541,18 +536,41 @@
         <div class="contact-card">
           <h3>💬 Send Us a Message</h3>
           <br/>
-          <div class="enquiry-form">
-            <div class="form-group"><label>Your Name</label><input type="text" placeholder="e.g. Mary O'Brien" /></div>
-            <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com" /></div>
-            <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+353 xx xxx xxxx" /></div>
-            <div class="form-group"><label>Child's Age</label><input type="text" placeholder="e.g. 2 years old" /></div>
-            <div class="form-group"><label>Your Message</label><textarea rows="4" placeholder="Tell us about your childcare needs or any questions..."></textarea></div>
-            <button class="btn-primary" onclick="alert('Thank you! We will be in touch shortly 🐻')">Send Enquiry</button>
+          <!-- UPDATED: Formspree connected form -->
+          <form id="contact-form" class="enquiry-form"
+                action="https://formspree.io/f/mwvzywnr"
+                method="POST">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" name="name" placeholder="e.g. Mary O'Brien" required />
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" name="email" placeholder="your@email.com" required />
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" name="phone" placeholder="+353 xx xxx xxxx" />
+            </div>
+            <div class="form-group">
+              <label>Child's Age</label>
+              <input type="text" name="childs_age" placeholder="e.g. 2 years old" />
+            </div>
+            <div class="form-group">
+              <label>Your Message</label>
+              <textarea name="message" rows="4" placeholder="Tell us about your childcare needs or any questions..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Send Enquiry</button>
+          </form>
+
+          <!-- Success message shown after submission -->
+          <div class="form-success" id="form-success">
+            🐻 <strong>Thank you for your message!</strong><br/>
+            We'll be in touch with you shortly.
           </div>
         </div>
       </div>
 
-      <!-- UPDATED: Real Instagram and Facebook links -->
       <div style="margin-top:2rem;text-align:center;padding:2rem;background:var(--ginger-pale);border-radius:16px;">
         <p style="color:var(--text-mid);margin-bottom:1rem;font-size:15px;">Follow us for daily updates, activities & photos of the fun!</p>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
@@ -587,6 +605,26 @@
       document.getElementById('sidebar').classList.remove('open');
       document.getElementById('overlay').classList.remove('open');
     }
+
+    // Formspree AJAX submission - shows success message without leaving the page
+    const form = document.getElementById('contact-form');
+    const successMsg = document.getElementById('form-success');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const data = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        form.style.display = 'none';
+        successMsg.classList.add('show');
+      } else {
+        alert('Something went wrong. Please try emailing us directly at jennylynch1@gmail.com');
+      }
+    });
   </script>
 </body>
 </html>
